@@ -156,57 +156,104 @@ The conditions under which a system is intended to operate, including its users,
 
 ### System Behavior and Analysis
 
-#### White-Box System or Method
-A system or method whose internal structure and operation are known and available for analysis.
+#### White-Box Systems and Methods
+A *white-box system* is one whose internal subsystems and components are known and available for analysis. Typically, this would mean an equation or software program can be written to model the system. *White-box methods* are those which rely on having a *white-box view* or *whitebox access* to a system.
 
-#### Black-Box System or Method
-A system or method that is analyzed primarily through its inputs and outputs without requiring knowledge of its internal structure.
+#### Black-Box Systems and Methods
+A *black-box system* has known inputs and outputs which can be collected by experimentation or probing, but unknown internals. A *black-box method* makes no assumptions about the internals of a system.
 
-#### Gray-Box System or Method
-A system or method for which some internal structure or prior knowledge is available but other aspects are unknown or treated as a black box.
+#### Gray-Box Systems and Methods
+A *gray-box system* is one having partially known internals. For example, some structure might be known but a precise equation or the precise parameters of that equation might be unknown.
 
-#### Linear Function or System
-A function or system that satisfies the principles of additivity and homogeneity, and therefore obeys superposition.
+#### Linear System
+A *linear system* has output directly proportional to its input, such that the relationship between all outputs and inputs can be described as linear (e.g., straight lines) functions. Linear systems obey the superposition principle, i.e., providing the sum of two inputs will yield an output equal to the sum of the outputs that would have resulted from each input individually. We will review linearity more thoroughly in later material.
 
-#### Nonlinear Function or System
-A function or system that does not satisfy the superposition principle. Most real-world systems and many machine learning models are nonlinear.
+#### Nonlinear System
+A *nonlinear system* has output which cannot be described as a linear function of its input, and therefore does not obey superposition. Most real-world systems and many machine learning models are nonlinear.
 
 #### Deterministic System
-A system in which the same state and inputs produce the same outputs and subsequent state under identical conditions.
+A *deterministic system* is a system where the same system state and inputs produce the same outputs and subsequent state under identical initial conditions.
 
 #### Non-Deterministic System
-A system whose behavior is not completely determined by its observable current state and inputs. Non-determinism may arise from randomness, concurrency, unobserved variables, or other sources.
-
-#### Stochastic System or Method
-A system or method that explicitly incorporates random variables or probabilistic behavior.
+A *non-deterministic system* has behavior not completely determined by its observable current state and inputs. Non-determinism may arise from randomness, unobserved variables, measurement noise, or other factors. Non-deterministic systems are often modeled as *stochastically*, i.e., using random variables.
 
 #### Robustness
-The ability of a system or model to maintain acceptable performance when inputs, operating conditions, or assumptions vary within some range.
+In this course, *robustness* refers to the ability of a system maintain acceptable performance when inputs, operating conditions, domain, or assumptions vary within some pre-defined range.
 
 #### Resilience
-The ability of a system to withstand, recover from, or adapt to failures, disruptions, unexpected conditions, or attacks. NIST treats resilience as broader than ordinary robustness and includes unexpected or adversarial use.
-
+In this course, *resilience* refers to the ability of a system to withstand, recover from, or adapt to failures, disruptions, unexpected conditions, or attacks. NIST treats resilience as broader than ordinary robustness and includes unexpected or adversarial use. In this course, we will aim to create systems that are resilient to environmental and adversarial conditions.
 
 ### Types of Learning
-Supervised Learning
-Unsupervised Learning
-Reinforcement Learning
-Remember that self-supervised learning is supervised learning!
 
-### Types of AI Tasks
+There are three basic types of learning we will encounter in this course.
 
-Detection
-Classification
-Semi-supervised and Weakly-Supervised Learning
-Few-shot and Zero-shot Learning
+#### Supervised Learning
+*Supervised learning* refers to learning a dataset for which labels, or a mapping from inputs to target outputs, are available.
 
-### Machine Learning Operations (MLOps)
+#### Unsupervised Learning
+*Unsupervised learning* refers to extracting useful structure, representations, distributions, or relationships from data *without* externally provided target outputs or labels.
 
-Related Term: Development and Security Operations (DevSecOps)
-Data Augmentation
-Data Transformation
-Model Selection
-Continual Learning / Life-long Learning
-Explainable AI (XAI)
-Confounding Attributes
-Adversarial AI
+#### Reinforcement Learning
+*Reinforcement learning* is done through *interaction with an environment* so as to maximize a measure of cumulative reward.
+
+#### Additional Types of Learning
+
+We will also encounter all of the following types of learning.
+
+* *Self-Supervised Learning* - Learning in which target values are generated automatically from the data itself rather than supplied by an external annotator. The training objective is typically supervised, but the supervision is constructed from otherwise unlabeled data.
+* *Semi-Supervised Learning* - Learning from a dataset containing both labeled and unlabeled examples.
+* *Weakly Supervised Learning* - Learning from supervision that is incomplete, imprecise, noisy, indirect, or otherwise weaker than fully labeled training examples.
+* *Active Learning* - A learning approach in which the learning algorithm selects examples or observations for which obtaining additional labels or information is expected to be particularly useful.
+* *Transfer Learning* - Using knowledge or representations learned for one problem, dataset, or domain to improve learning or performance on another.
+* *Continual Learning / Lifelong Learning* - Learning in which a system continues to acquire or update knowledge over time as new data or tasks become available, ideally without losing previously acquired capabilities.
+
+Though often referred to as different learning paradigms, these learning types are built from the fundamental elements of the basic three: supervised, unsupervised, and reinforcement learning.
+
+### Data Terminology
+
+#### Sample
+A *sample*, or synonymously, *example*, or *instance* is an observation supplied to or used by a learning algorithm, commonly consisting of an input and, in supervised learning, an associated label or target.
+
+#### Feature / Attribute
+A *feature* or *attribute* is a measurable or computable property of an example that is used as an input to a model.
+
+#### Target / Label
+A *target* or *label* is a desired output associated with a supervised learning example. The term label is generally used for categorical data while the term target is used more generally, e.g., for regression tasks.
+
+#### Dataset
+A *dataset* is a collection of examples used for training, evaluating, or operating a machine learning system.
+
+#### Training, Validation, and Testing Sets
+The *training* dataset is the portion of a dataset used to fit the model. The *validation* dataset is used during development to make choices about models, hyperparameters, stopping criteria, or other aspects of the learning procedure. A *test* dataset is held apart from training and model selection entirely and used to estimate the performance of the final selected model on completely unseen examples.
+
+### Learning Terminology
+
+#### Parameter
+A *parameter* is a value within a model that is learned or otherwise determined during training.
+
+#### Hyperparameter
+A *hyperparameter* is a setting that controls the model architecture or learning procedure and is normally chosen outside the ordinary parameter-fitting process. Often the difference between parameters and hyperparameters is the time-scales on which they change.
+
+#### Loss and Objective Functions
+A *loss function* measures the cost or error of a model's output. Learning algorithms aim to increase performance by reducing loss functions. More broadly, *objective functions* can include additional terms, such as regularization terms, which guide the learning process toward broader objectives beyond simply minimizing loss, often with the aim of yielding a more robust, resilient, or general model. Loss and objective functions are minimized through *optimization* methods.
+
+#### Overfit and Underfit Models
+A model which fits the training data well but fails to generalize to new data is referred to as overfit. A model which is insufficiently trained to capture important patterns and structure in the training data is referred to as underfit.
+
+### Common AI Tasks
+
+Though we will not have a chance to perform hands-on assignments with all of these tasks, we will cover and gain familiarity with many of the following common tasks an AI component can perform in a system.
+
+* *Classification*: Assigning an input to one or more discrete categories.
+* *Regression*: Predicting a continuous numerical quantity from an input.
+* *Detection*: Determining whether specified objects, events, conditions, or patterns are present, often including information about their locations or times.
+* *Segmentation*: Partitioning an input into meaningful regions or elements, often by assigning a class or other label to individual pixels, samples, tokens, or other components.
+* *Ranking*: Ordering a set of items according to a learned criterion or predicted relevance.
+* *Clustering*: Grouping examples so that examples within the same group are similar according to some criterion, without requiring predefined class labels.
+* *Dimensionality Reduction*: Representing data using fewer variables while preserving information or structure considered important for subsequent goals or tasks.
+* *Representation Learning*: Learning features or representations of data rather than requiring all useful features to be designed manually.
+* *Anomaly Detection*: Identifying inputs or events that differ significantly from patterns regarded as normal or previously observed.
+* *Generation*: Producing new data, such as text, images, audio, or other structured outputs, based on a learned distribution or model.
+* *Prediction*: Estimating an unknown or future quantity from available information.
+* *Control*: Selecting actions or inputs that cause a dynamic system to behave in a desired manner.
+* *Planning*: Determining a sequence of actions intended to achieve a goal, usually using some representation of possible states, actions, and consequences.

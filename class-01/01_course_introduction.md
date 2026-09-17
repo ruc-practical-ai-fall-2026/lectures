@@ -62,12 +62,12 @@ This course further focuses on the software aspects of the study of intelligent 
 
 A key theme in this course will be understanding the best practices that must be applied to realize these benefits in real-world applications. Learning algorithms from data introduces new risks and the need for continuous evaluation of algorithms throughout their lifecycle. Risks which must be managed to realize the benefits of ML algorithms in practice include:
 
-* Label noise - errors in the labels which must be corrected or, if not corrected, handled with an appropriate learning strategy.
-* Data impairments and corruption - noise, corruption, or human errors in collected data can reduce training or inference performance.
-* Data leakage - leaking of information between the training and evaluation datasets can cause overly-optimistic performance evaluations, shortcut learning, and other issues. This can happen in unexpected ways that are less intuitive than "training on the test data," such as choosing the wrong sampling or data splitting strategies, or artifacts from data collection sensors, instruments, or processes leaving clues as to the source of a dataset in the data.
-* Data drift - changes in the distributions of input data can lead to reduced performance or unexpected behavior.
-* Concept drift - changes in the relationship between input and target output data can lead to unexpected outputs and drive a need to update ML algorithms.
-* Catastrophic forgetting - for learning paradigms that require sequentially training and retraining, training on new data can lead to forgetting of previously correct input-output relationships.
+* *Label noise*: errors in the labels which must be corrected or, if not corrected, handled with an appropriate learning strategy.
+* *Data impairments and corruption*: noise, corruption, or human errors in collected data can reduce training or inference performance.
+* *Data leakage*: - leaking of information between the training and evaluation datasets can cause overly-optimistic performance evaluations, shortcut learning, and other issues. This can happen in unexpected ways that are less intuitive than "training on the test data," such as choosing the wrong sampling or data splitting strategies, or artifacts from data collection sensors, instruments, or processes leaving clues as to the source of a dataset in the data.
+* *Data drift*: - changes in the distributions of input data can lead to reduced performance or unexpected behavior.
+* *Concept drift*: - changes in the relationship between input and target output data can lead to unexpected outputs and drive a need to update ML algorithms.
+* *Catastrophic forgetting*: - for learning paradigms that require sequentially training and retraining, training on new data can lead to forgetting of previously correct input-output relationships.
 
 Examples of ML algorithms, model architectures, and types of models that we will discuss include:
 
@@ -200,12 +200,12 @@ There are three basic types of learning we will encounter in this course.
 
 We will also encounter all of the following types of learning.
 
-* *Self-Supervised Learning* - Learning in which target values are generated automatically from the data itself rather than supplied by an external annotator. The training objective is typically supervised, but the supervision is constructed from otherwise unlabeled data.
-* *Semi-Supervised Learning* - Learning from a dataset containing both labeled and unlabeled examples.
-* *Weakly Supervised Learning* - Learning from supervision that is incomplete, imprecise, noisy, indirect, or otherwise weaker than fully labeled training examples.
-* *Active Learning* - A learning approach in which the learning algorithm selects examples or observations for which obtaining additional labels or information is expected to be particularly useful.
-* *Transfer Learning* - Using knowledge or representations learned for one problem, dataset, or domain to improve learning or performance on another.
-* *Continual Learning / Lifelong Learning* - Learning in which a system continues to acquire or update knowledge over time as new data or tasks become available, ideally without losing previously acquired capabilities.
+* *Self-Supervised Learning*: Learning in which target values are generated automatically from the data itself rather than supplied by an external annotator. The training objective is typically supervised, but the supervision is constructed from otherwise unlabeled data.
+* *Semi-Supervised Learning*: Learning from a dataset containing both labeled and unlabeled examples.
+* *Weakly Supervised Learning*: Learning from supervision that is incomplete, imprecise, noisy, indirect, or otherwise weaker than fully labeled training examples.
+* *Active Learning*: A learning approach in which the learning algorithm selects examples or observations for which obtaining additional labels or information is expected to be particularly useful.
+* *Transfer Learning*: Using knowledge or representations learned for one problem, dataset, or domain to improve learning or performance on another.
+* *Continual Learning / Lifelong Learning*: Learning in which a system continues to acquire or update knowledge over time as new data or tasks become available, ideally without losing previously acquired capabilities.
 
 Though often referred to as different learning paradigms, these learning types are built from the fundamental elements of the basic three: supervised, unsupervised, and reinforcement learning.
 

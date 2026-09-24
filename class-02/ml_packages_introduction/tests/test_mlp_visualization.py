@@ -56,7 +56,9 @@ def test_build_weights_dataframe_contains_each_connection() -> None:
     weights = mlp_visualization.build_weights_dataframe(mlp, neurons)
 
     assert len(weights) == 6
-    np.testing.assert_array_equal(np.array(weights.loc[0, "x"]).ravel(), [0, 1])
+    np.testing.assert_array_equal(
+        np.array(weights.loc[0, "x"]).ravel(), [0, 1]
+    )
     np.testing.assert_array_equal(
         np.array(weights.loc[0, "y"]).ravel(), [0.0, 0.0]
     )
@@ -96,8 +98,16 @@ def test_plot_weights_plots_each_weight(monkeypatch) -> None:
     mlp_visualization.plot_weights(weights, linewidth=2.0, line_alpha=0.5)
 
     assert calls == [
-        ([0, 1], [0.0, 1.0], {"color": "red", "linewidth": 2.0, "alpha": 0.5, "zorder": 0}),
-        ([1, 2], [1.0, 0.5], {"color": "blue", "linewidth": 2.0, "alpha": 0.5, "zorder": 0}),
+        (
+            [0, 1],
+            [0.0, 1.0],
+            {"color": "red", "linewidth": 2.0, "alpha": 0.5, "zorder": 0},
+        ),
+        (
+            [1, 2],
+            [1.0, 0.5],
+            {"color": "blue", "linewidth": 2.0, "alpha": 0.5, "zorder": 0},
+        ),
     ]
 
 

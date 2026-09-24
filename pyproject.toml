@@ -17,6 +17,12 @@ dependencies = [
     "wordcloud>=1.9.6",
 ]
 
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",

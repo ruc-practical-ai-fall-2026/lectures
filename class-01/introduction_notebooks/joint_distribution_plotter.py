@@ -5,8 +5,8 @@ https://matplotlib.org/stable/gallery/statistics/confidence_ellipse.html
 """
 
 import matplotlib.pyplot as plt
-import matplotlib.transforms as transforms
 import numpy as np
+from matplotlib import transforms
 from matplotlib.patches import Ellipse
 
 
@@ -60,7 +60,7 @@ def confidence_ellipse(x, y, ax, n_std=3.0, facecolor="none", **kwargs):
         width=ell_radius_x * 2,
         height=ell_radius_y * 2,
         facecolor=facecolor,
-        **kwargs
+        **kwargs,
     )
 
     # Calculating the standard deviation from the square root of the

@@ -60,13 +60,17 @@ def test_generate_class_distribution_has_requested_shape_and_values() -> None:
     np.testing.assert_array_equal(distribution, np.array([[1.0, 2.0]] * 4))
 
 
-def test_generate_multiclass_dataset_returns_features_and_numeric_labels() -> None:
-    features, labels = data_generators.generate_multiclass_multidistribution_dataset(
-        2,
-        [np.array([[1.0, 2.0]]), np.array([[3.0, 4.0]])],
-        [np.zeros((1, 2)), np.zeros((1, 2))],
-        [np.array([1.0]), np.array([1.0])],
-        ["first", "second"],
+def test_generate_multiclass_dataset_returns_features_and_numeric_labels() -> (
+    None
+):
+    features, labels = (
+        data_generators.generate_multiclass_multidistribution_dataset(
+            2,
+            [np.array([[1.0, 2.0]]), np.array([[3.0, 4.0]])],
+            [np.zeros((1, 2)), np.zeros((1, 2))],
+            [np.array([1.0]), np.array([1.0])],
+            ["first", "second"],
+        )
     )
 
     np.testing.assert_array_equal(
@@ -86,12 +90,14 @@ def test_generate_xor_dataset_has_expected_labels_and_points() -> None:
 
 
 def test_generate_half_moon_dataset_has_expected_shapes_and_labels() -> None:
-    features, labels, semantic_labels = data_generators.generate_half_moon_dataset(
-        n_samples_per_class=4,
-        n_clusters_per_class=2,
-        radius_r=1.0,
-        separation_offset_d=0.0,
-        sigma=0.0,
+    features, labels, semantic_labels = (
+        data_generators.generate_half_moon_dataset(
+            n_samples_per_class=4,
+            n_clusters_per_class=2,
+            radius_r=1.0,
+            separation_offset_d=0.0,
+            sigma=0.0,
+        )
     )
 
     assert features.shape == (8, 2)

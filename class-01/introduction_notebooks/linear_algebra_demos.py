@@ -73,7 +73,7 @@ class L2NormDemo:
             self._build_display_text(norm),
             fontsize=9,
             color="black",
-            bbox=dict(facecolor="grey", edgecolor="black", pad=8.0),
+            bbox={"facecolor": "grey", "edgecolor": "black", "pad": 8.0},
         )
 
     def _build_sliders(self):

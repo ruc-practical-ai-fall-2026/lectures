@@ -44,8 +44,12 @@ def test_generate_capital_letters() -> None:
         ]
     )
 
-    np.testing.assert_array_equal(character_generator.generate_capital_a(), expected_a)
-    np.testing.assert_array_equal(character_generator.generate_capital_b(), expected_b)
+    np.testing.assert_array_equal(
+        character_generator.generate_capital_a(), expected_a
+    )
+    np.testing.assert_array_equal(
+        character_generator.generate_capital_b(), expected_b
+    )
 
 
 def test_labels_and_letter_lookup() -> None:
@@ -80,13 +84,17 @@ def test_convert_lists_to_dataframe() -> None:
 
 def test_generate_letters_shape_contents_and_reproducibility() -> None:
     first = character_generator.generate_letters(["A", "B"], [0.0, 10.0], 2, 3)
-    second = character_generator.generate_letters(["A", "B"], [0.0, 10.0], 2, 3)
+    second = character_generator.generate_letters(
+        ["A", "B"], [0.0, 10.0], 2, 3
+    )
 
     assert first.shape == (8, 5)
     assert first["Strings"].tolist() == ["A", "A", "B", "B"] * 2
     assert first["Labels"].tolist() == [65, 65, 66, 66] * 2
     assert first["SNR Values (dB)"].tolist() == [0.0, 10.0, 0.0, 10.0] * 2
-    for clean_pixels, letter in zip(first["Clean Letter Pixels"], first["Strings"]):
+    for clean_pixels, letter in zip(
+        first["Clean Letter Pixels"], first["Strings"]
+    ):
         np.testing.assert_array_equal(
             clean_pixels, character_generator.generate_letter_array(letter)
         )

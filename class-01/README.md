@@ -1,6 +1,6 @@
 # Class 01 - Introduction
 
-In this class we will motivate the study of resilient AI systems.
+In this class we will motivate the study of resilient AI systems and review basic math and statistics concepts.
 
 ## License
 

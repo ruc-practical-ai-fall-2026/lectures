@@ -1,10 +1,16 @@
+from typing import Any
+
 import numpy as np
 import pandas as pd
+from numpy.typing import NDArray
 
 
 def make_train_test_split_dataframes(
-    input_df, features_list, target_column, test_fraction=0.2
-):
+    input_df: pd.DataFrame,
+    features_list: list[str],
+    target_column: str,
+    test_fraction: float = 0.2,
+) -> tuple[NDArray[Any], NDArray[Any], NDArray[Any], NDArray[Any]]:
     """Makes train and test dataframes and records the split in the original."""
     number_of_rows = len(input_df)
     number_of_ones = int(number_of_rows * test_fraction)

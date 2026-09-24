@@ -1,9 +1,13 @@
+from typing import Any
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import cm, colormaps
+from matplotlib.colors import Colormap, Normalize
+from matplotlib.figure import Figure
 
 
-def get_mlp_min_max_width(mlp):
+def get_mlp_min_max_width(mlp: Any) -> tuple[int, int]:
     """Gets the min and max width of an MLP in sklearn."""
     widths = [layer.shape[0] for layer in mlp.coefs_]
     widths.append(mlp.n_outputs_)
@@ -12,7 +16,7 @@ def get_mlp_min_max_width(mlp):
     return (min_width, max_width)
 
 
-def print_ascii_mlp(mlp):
+def print_ascii_mlp(mlp: Any) -> None:
     """Prints an MLP as ASCII"""
     _, max_width = get_mlp_min_max_width(mlp)
     number_of_spaces = max_width * 3 + 5
@@ -25,7 +29,7 @@ def print_ascii_mlp(mlp):
         )
 
 
-def build_neurons_dataframe(mlp):
+def build_neurons_dataframe(mlp: Any) -> pd.DataFrame:
     """Builds a DataFrame holding information about the neurons in an MLP"""
     weights = mlp.coefs_
     _, max_width = get_mlp_min_max_width(mlp)
@@ -52,7 +56,9 @@ def build_neurons_dataframe(mlp):
 
 
 # Build the weights DataFrame
-def build_weights_dataframe(mlp, neurons_df):
+def build_weights_dataframe(
+    mlp: Any, neurons_df: pd.DataFrame
+) -> pd.DataFrame:
     """Builds a DataFrame holding the weights of an sklearn MLP."""
     weights = mlp.coefs_
 
@@ -97,7 +103,9 @@ def build_weights_dataframe(mlp, neurons_df):
     return weights_df
 
 
-def build_colormap(weights_df, colormap_name):
+def build_colormap(
+    weights_df: pd.DataFrame, colormap_name: str
+) -> tuple[Colormap, Normalize]:
     """Build a colormap and scale the weights to match the colormap"""
     weight_values_flat_array = weights_df.weight.to_numpy()
     min_weight = min(weight_values_flat_array)
@@ -109,7 +117,9 @@ def build_colormap(weights_df, colormap_name):
     return cmap, norm
 
 
-def plot_weights(weights_df, linewidth, line_alpha):
+def plot_weights(
+    weights_df: pd.DataFrame, linewidth: float, line_alpha: float
+) -> None:
     """Plots the weights from the weights_df."""
     for _, row in weights_df.iterrows():
         plt.plot(
@@ -122,7 +132,12 @@ def plot_weights(weights_df, linewidth, line_alpha):
         )
 
 
-def plot_neurons(neurons_df, neuron_color, neuron_size, neuron_alpha):
+def plot_neurons(
+    neurons_df: pd.DataFrame,
+    neuron_color: str,
+    neuron_size: float,
+    neuron_alpha: float,
+) -> None:
     """Plots the neurons from the neurons DataFrame."""
     plt.scatter(
         neurons_df.x,
@@ -134,7 +149,7 @@ def plot_neurons(neurons_df, neuron_color, neuron_size, neuron_alpha):
     )
 
 
-def build_dataframes(mlp):
+def build_dataframes(mlp: Any) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Builds DataFrames holding the neurons and weights of an MLP."""
     neurons_df = build_neurons_dataframe(mlp)
     weights_df = build_weights_dataframe(mlp, neurons_df)
@@ -142,17 +157,17 @@ def build_dataframes(mlp):
 
 
 def generate_plots(
-    neurons_df,
-    weights_df,
-    figure_width,
-    figure_height,
-    linewidth,
-    neuron_alpha,
-    neuron_color,
-    line_alpha,
-    neuron_size,
-    colormap_name,
-):
+    neurons_df: pd.DataFrame,
+    weights_df: pd.DataFrame,
+    figure_width: float,
+    figure_height: float,
+    linewidth: float,
+    neuron_alpha: float,
+    neuron_color: str,
+    line_alpha: float,
+    neuron_size: float,
+    colormap_name: str,
+) -> Figure:
     """Generates the plots to visualize an MLP."""
     fig = plt.figure(figsize=(figure_width, figure_height))
     cmap, norm = build_colormap(weights_df, colormap_name)
@@ -165,16 +180,16 @@ def generate_plots(
 
 
 def display_mlp(
-    mlp,
-    linewidth=1.5,
-    neuron_alpha=1,
-    neuron_color="black",
-    line_alpha=0.8,
-    figure_width=40,
-    figure_height=6,
-    neuron_size=30,
-    colormap_name="Greys",
-):
+    mlp: Any,
+    linewidth: float = 1.5,
+    neuron_alpha: float = 1,
+    neuron_color: str = "black",
+    line_alpha: float = 0.8,
+    figure_width: float = 40,
+    figure_height: float = 6,
+    neuron_size: float = 30,
+    colormap_name: str = "Greys",
+) -> Figure:
     """Displays the weights of an MLP. Does not plot intercepts (biases)."""
     neurons_df, weights_df = build_dataframes(mlp)
     fig = generate_plots(

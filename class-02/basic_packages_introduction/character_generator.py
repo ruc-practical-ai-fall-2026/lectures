@@ -1,7 +1,5 @@
 """Generate a datasets of letters for machine learning experiments."""
 
-from typing import List
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -103,11 +101,11 @@ def generate_letter_array(letter: str) -> np.ndarray:
 
 
 def convert_letters_lists_to_dataframe(
-    letters: List[np.ndarray],
-    clean_letters: List[np.ndarray],
-    snr_values: List[float],
-    labels: List[int],
-    strings: List[str],
+    letters: list[np.ndarray],
+    clean_letters: list[np.ndarray],
+    snr_values: list[float],
+    labels: list[int],
+    strings: list[str],
 ) -> pd.DataFrame:
     """Convert list of information about letters into a DataFrame.
 
@@ -133,8 +131,8 @@ def convert_letters_lists_to_dataframe(
 
 
 def generate_letters(
-    letters_list: List[str],
-    snr_db_list: List[float],
+    letters_list: list[str],
+    snr_db_list: list[float],
     number_of_instances_per_letter: int = 50,
     rng_seed=1,
 ) -> pd.DataFrame:
@@ -182,8 +180,8 @@ def generate_letters(
 
 def visualize_letters_dataframe(
     letters_df: pd.DataFrame,
-    snr_values: List[float],
-    letters: List[str],
+    snr_values: list[float],
+    letters: list[str],
     snr_atol: float = 1e-3,
 ) -> None:
     """Visualize a DataFrame of letters.

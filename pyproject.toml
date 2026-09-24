@@ -17,6 +17,9 @@ dependencies = [
     "wordcloud>=1.9.6",
 ]
 
+[tool.uv]
+cache-dir = ".uv_cache"
+
 [tool.ruff]
 line-length = 79
 

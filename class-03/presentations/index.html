@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>reveal.js - Markdown Example</title>
+
+	<link rel="stylesheet" href="./dist/reveal.css">
+	<link rel="stylesheet" href="./dist/theme/black.css" id="theme">
+
+	<link rel="stylesheet" href="./plugin/highlight/monokai.css">
+</head>
+
+<body>
+
+	<div class="reveal">
+
+		<div class="slides">
+
+			<!-- Slides are separated by three dashes (the default) -->
+			<section data-markdown data-separator="^\n----\n$" data-separator-vertical="^\n--\n$">
+				<script type="text/template">
+					## Class 4: ML Basics (Emphasis on Neural Networks)
+					---
+					<img src="./images/ruc_practical_ai_logo.svg" style="display: block; margin: 0 auto; " alt="drawing" width="450"/>
+
+					----
+
+					## Deep Learning and ML References
+					---
+
+					* Deep Learning (Goodfellow, Bengio, Courville)
+					* AI: A Modern Approach (Russell and Norvig)
+
+					----
+
+					## Toolchain for this Class
+					---
+					<img src="./images/toolchain.svg" style="display: block; margin: 0 auto; " alt="drawing" width="1400"/>
+
+					----
+
+					## Today's Focus
+					---
+					<img src="./images/toolchain_python_highlight.svg" style="display: block; margin: 0 auto; " alt="drawing" width="1400"/>
+
+					----
+
+					## Training Toolchain
+					---
+
+					<img src="./images/training_toolchain.svg" style="display: block; margin: 0 auto; " alt="drawing" width="1400"/>
+
+					----
+
+					## The Basic Basics: Best Practices
+					---
+					* Don't train on the test data (remember this can happen in sneaky ways)
+					    - Video example
+					* Be prepared for data drift
+					* Evaluate model *fitting capacity*
+					* Track experiments
+					* Use pre- and post-guardrails for input and output validation (yes, like web development)
+
+					----
+
+					## The Basic Basics: Knobs You Have to Turn
+					---
+					* Data labeling (or lack thereof)
+					* Model architecture - the assumed structure of the data
+					* Loss function - the definition of good
+					* Learning paradigm - the question we are asking
+					* Learning rate (and other optimization parameters) - how fast can we
+
+					----
+
+					## Caution...
+					---
+					* It's not just *"train and test"*
+
+					----
+
+					## Data Pipeline: Data Collection
+					---
+
+					* Gathering data from existing sources
+					* Always more expensive (time consuming) than you think it will be
+					* Data will be full of exceptions
+
+					----
+
+					## Data Pipeline: Feature Engineering
+					---
+					* Often considered "old school" but still highly effective
+					* Can be paired with deep learning to get the best of both
+					* Can have the outputs of deep learning models act as inputs to final models
+					* Common in medical and high reliability applications
+
+					----
+
+					## Data Pipeline: Unsupervised / Semi-supervised
+					---
+
+					* Most real world data is not labeled
+					* Helpful technique can be to use unsupervised learning **before** resorting to labeling
+					* Labeling first can introduce human bias into the labels
+
+					----
+
+					## Data Pipeline: Final Labeling
+					---
+					* If the final design must be supervised (classification v. clustering), assign human labels last
+					* Use unsupervised initial pass to guide this step
+					* Remember to annotate potentially confounding labels in addition to target labels
+
+					----
+
+					## Training: Identify Candidate Models
+					---
+					* Do not start with a single architecture
+					* Try heterogenous architectures to identify trade offs
+					* Remember, how well each does or does not fit tells us about the data
+					    - (This is an often under utilized paradigm of machine learning in and of itself...)
+
+					----
+
+					## Training: Learning Paradigm Selection
+					---
+					* What learning paradigm best suits the problem? (fully supervised, multi-task, contrastive, self-supervised, ...)
+					* Do we want to classify the digits written, or group them according to who wrote them?
+					* Tip: ask the question we want to ask the model in plain english
+
+					----
+
+					## Training: Loss Function Design
+					---
+					* The loss function will define how the model rewards / penalizes good / bad outcomes
+					* Intersection with higher level system design consideration is inevitable
+					* **The loss function chosen specifies our definition of "good"**
+					* Certain highly effective loss functions are often closely guarded intellectual property
+
+					----
+
+					## Training: Kick off Batches!
+					---
+					* Kick off training runs across architecture, loss function, and learning paradigm combinations
+					* If infrastructure allows (less in scope for this course), kick them off in parallel
+					* **Be sure you can replicate any results produced!**
+						- At minimum: use seeds for random numbers and define configuration parameters in files (vice variables)
+
+					----
+
+					## Training: Hyperparameter Tuning
+					---
+					* Every variable in all previous steps is now subject to tuning...
+					* Unfortunately, still not a hard science
+					* When datasets are small enough, there is no better search than grid search (rarely true in practice)
+					* State of the art approaches can use reinforcement learning and population based search
+
+					----
+
+					## Caution...
+					---
+					* There is no such thing as a free lunch (really!)
+
+					----
+
+					## Test and Evaluation: Explainability
+					---
+					* Do not run explainability last
+					* Keep explainability as close as possible to training and hyperparameter tuning so explainability *artifacts* can influence it
+					* Use explainability as the first step in a "feedback" (OODA) loop
+
+					----
+
+					## Test and Evaluation: Adversarial Testing
+					---
+					* See the system through the eyes of the "bad guy"
+					* Similar to cyber security penetration testing or red-teaming
+					* Have a separate team red-team the system with fresh eyes
+					* Stay ahead of the chess game
+
+					----
+
+					## Test and Evaluation: Model Export
+					---
+					* Export the model to a standard format
+					* Version control the model and associated artifacts
+					* Automate artifact generation using GitHub actions
+
+					----
+
+					## Test and Evaluation: Conformance Testing
+					---
+					* The big silly check...
+					* Does the model you exported produce the same outputs for the same inputs?
+					* Bare minimum requirement: run test inputs through both which stimulate each class
+					* Best practice: perform *interval analysis* or optimization towards failure
+
+					----
+
+					## Caution...
+					---
+					* **Never (EVER) deploy a model without a conformance test**
+					* (Not even in a test environment... who knows who will see the test results and under or over estimate performance)
+
+					----
+
+					## Ship to Production!
+					---
+					* Send it!
+					* But, the job doesn't stop here...
+					* Once the model is shipped, we need to close the feedback loop of keeping it updated
+					* This will be the subject of our *ML Operations (MLOps)* class
+
+					----
+
+					<img src="./images/ruc_practical_ai_logo.svg" style="display: block; margin: 0 auto; " alt="drawing" width="1400"/>
+
+
+                </script>
+			</section>
+		</div>
+	</div>
+
+	<script src="./dist/reveal.js"></script>
+	<script src="./plugin/markdown/markdown.js"></script>
+	<script src="./plugin/highlight/highlight.js"></script>
+	<script src="./plugin/notes/notes.js"></script>
+	<script src="./plugin/math/math.js"></script>
+
+	<script>
+
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX]
+		});
+
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+ai.png, 0
+rutgers.png, 1
+shield.png, 2

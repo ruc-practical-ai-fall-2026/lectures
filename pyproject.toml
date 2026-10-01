@@ -11,12 +11,17 @@ dependencies = [
     "ipympl>=0.10.0",
     "matplotlib>=3.11.2",
     "numpy>=2.5.3",
+    "onnx>=1.23.1",
+    "onnxruntime>=1.30.0",
+    "onnxscript>=0.7.2",
     "pandas>=3.0.5",
     "pip>=26.2.1",
+    "pybsm[graphics]>=0.16.0",
     "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
     "torch>=2.14.0",
     "torchvision>=0.29.1",
+    "torchviz>=0.0.3",
     "wordcloud>=1.9.6",
 ]
 

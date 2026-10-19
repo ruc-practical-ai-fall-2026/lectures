@@ -262,7 +262,7 @@ For example, a GPU with a peak throughput of 300 [TFLOPs/s] operating at an MFU 
 $$
 \begin{aligned}
 P_{\text{eff}}
-&= 0.4 \times 300 \times 10^{12}\ \frac{\text{FLOPs}}{\text{s}} \\[4pt]
+&= 0.4 \times 300 \times 10^{12}\ \frac{\text{FLOPs}}{\text{s}} \\
 &= 1.2 \times 10^{14}\ \frac{\text{FLOPs}}{\text{s}}.
 \end{aligned}
 $$
@@ -382,7 +382,7 @@ Substituting the computational workload from our scaling equations,
 
 $$
 \begin{aligned}
-\tau &\approx \frac{6D\mu}{\eta P N_{\text{GPU}}} \\[6 pt]
+\tau &\approx \frac{6D\mu}{\eta P N_{\text{GPU}}} \\
   &\approx \frac{6r\mu^2}{\eta P N_{\text{GPU}}}.
 \end{aligned}
 $$
@@ -498,7 +498,7 @@ The number of GPUs required as driven by memory needs, $N_{\text{memory}}$ is gi
 
 $$
 \begin{align*}
-N_{\text{memory}}(\mu) &= \left\lceil\frac{M_{\text{train}}(\mu)}{M_{\text{avail}}}\right\rceil, \\[12 pt]
+N_{\text{memory}}(\mu) &= \left\lceil\frac{M_{\text{train}}(\mu)}{M_{\text{avail}}}\right\rceil, \\
     &= \left\lceil\frac{16\mu}{M(1 - f_R)}\right\rceil.
 \end{align*}
 $$

@@ -1,4 +1,4 @@
-# Model Scaling
+# Model Scaling Tutorial
 
 ## 1 Introduction
 

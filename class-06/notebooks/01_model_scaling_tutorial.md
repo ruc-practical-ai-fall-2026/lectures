@@ -500,10 +500,10 @@ $$
 The number of GPUs required as driven by memory needs, $N_{\text{memory}}$ is given by dividing the memory required to train the model, $M_{\text{train}}(\mu)$ by the memory available on each GPU accounting for the reserve, $M_{\text{avail}}$. Since we cannot purchase fractional GPUs, we take the ceiling for a conservative estimate:
 
 $$
-\begin{align*}
+\begin{aligned}
 N_{\text{memory}}(\mu) &= \left\lceil\frac{M_{\text{train}}(\mu)}{M_{\text{avail}}}\right\rceil, \\
     &= \left\lceil\frac{16\mu}{M(1 - f_R)}\right\rceil.
-\end{align*}
+\end{aligned}
 $$
 
 This provides the GPU count we need accounting for memory requirements.

@@ -6,7 +6,7 @@ When planning an AI project of significant size, one of the early questions we n
 
 Though it is not always practical to answer this question prematurely, once we have established our use case, formulated requirements compared to some baseline, determined how much data is required to represent the key attributes of our problem, and have an idea of the type of models we would like to train (perhaps from the results of early, small-scale experiments), we are ready to start planning for the computing resources required to *scale* our models.
 
-Generally, the computing resources we need to train and serve our models will grow as a function of the size of the models we are working with. Assuming end-to-end training, the size of the models will (usually) grow as a function of the size of the dataset. With those factors in mind, the right time to start thinking about scaling is before we start budgeting for large scale experiments (since compute will be a significant cost) and after we have established the factors our dataset must represent.
+For the dense transformer scaling relationships we will consider here, the compute-optimal model size generally increases with the number of training tokens. Assuming end-to-end training, the size of the models will (usually) grow as a function of the size of the dataset. With those factors in mind, the right time to start thinking about scaling is before we start budgeting for large scale experiments (since compute will be a significant cost) and after we have established the factors our dataset must represent.
 
 For example, if we are training an object recognition model, we will want an idea of how many objects we must recognize, from what poses, under what lighting conditions, from what distances, etc. so we can determine how many overall examples we should plan to collect or obtain to define the intended behavior of our model as completely as possible. With this number determined, we can get a rough idea of how large our model needs to be. From there, we can determine how many and what type of GPUs we might need to train, and can start to determine training cost from the cost of these GPUs.
 
@@ -19,7 +19,7 @@ All of these factors will depend on the relationship between model size and comp
 These scaling laws will give us the following approximate working relationships.
 * $D(\mu)$, the relationship between data set size, $D$, in *tokens* and model size, $\mu$, in *parameters*.
 * $C(\mu)$, the relationship between the computational cost to train, $C$, in floating point operations (FLOPs) and the model size, $\mu$.
-* $M(\mu)$, the relationship between the memory required during training and the model size, $\mu$.
+* $M_{\text{train}}(\mu)$, the relationship between the memory required during training and the model size, $\mu$.
 
 We will use these relationships to answer practical questions about the computational cost and memory required to train our models.
 
@@ -59,7 +59,7 @@ where:
 | $\mu$ | Number of model parameters | [parameters] |
 | $r$ | Tokens-per-parameter ratio | [tokens/parameter] |
 
-We will keep track of the units throughout our calculations with dimensional analysis. Starting with the basic chinchilla formula:
+We will keep track of the units throughout our calculations with dimensional analysis. Starting with the basic Chinchilla formula:
 
 $$
 D\ [\text{tokens}] = r \left[\frac{\text{tokens}}{\text{parameter}}\right]\ \mu\ [\text{parameters}].
@@ -83,7 +83,7 @@ Note also that the Chinchilla relationship does not tell us how large a model ne
 
 ### 2.2 PaLM: Training Computational Cost
 
-While the Chinchilla paper provides the relationship between dataset size and model size that we need, the PaLM paper provides a useful approximation for the floating-point operations (FLOPs) cost, $C(\mu)$, required to train a dense transformer model. We will consider two versions, of $C(\mu)$. First, ignoring self-attention corrections, the total training compute is approximately given by
+While the Chinchilla paper provides the relationship between dataset size and model size that we need, the PaLM paper provides a useful approximation for the floating-point operations (FLOPs) cost, $C(\mu)$, required to train a dense transformer model. We will consider two versions of $C(\mu)$. First, ignoring self-attention corrections, the total training compute is approximately given by
 
 $$
 C(\mu)\approx6D\mu.
@@ -107,9 +107,12 @@ where:
 | $W$ | Transformer hidden dimension (model width) | [elements] |
 
 The factor of 6 arises from the approximate computational cost of a training step including
-approximately 2 [FLOPs/(parameter $\cdot$ token)] for the forward pass and approximately 4 [FLOPs/(parameter $\cdot$ token)] for the backward pass. This is an approximate correction for dense transformers and assumes a fixed sequence length, $S$.
+approximately 2 [FLOPs/(parameter $\cdot$ token)] for the forward pass and approximately 4 [FLOPs/(parameter $\cdot$ token)] for the backward pass.
 
-TODO: additional explanation
+The factor of 6 is an approximation based on the matrix multiplications that dominate the computational cost of
+training dense transformers. It does not account for every operation performed during training, but provides a useful first estimate of the total workload.
+
+The additional term $12LSW$ accounts for an approximate self-attention correction, which becomes increasingly important as the sequence length, $S$, grows. This approximation assumes a conventional dense transformer architecture and a fixed sequence length.
 
 For the simplified equation, dimensional analysis gives
 
@@ -118,8 +121,6 @@ $$
 C(\mu)\ [\text{FLOPs}] &= 6\ \left[\frac{\text{FLOPs}}{\text{parameter} \cdot \text{token}}\right] D\ [\text{tokens}]\ \mu\ [\text{parameters}]
 \end{aligned}
 $$
-
-The additional term $12LSW$ accounts for the matrix multiplications involved in self-attention. Its contribution becomes increasingly important as the sequence length grows.
 
 Both approximations assume a dense transformer in which nearly all parameters participate in each forward pass. In practice, many state-of-the-art models use techniques such as mixture-of-experts (MoE) so that not all parameters of the model are used to process a given input. Such optimizations are not accounted for here.
 
@@ -160,7 +161,7 @@ We will come back to this expression to answer our computational planning questi
 
 Besides computing workload, $C(\mu)$, the next relationship we need to understand is that between model size and GPU memory required to train the model. It will not help to demonstrate that we can handle the computational load of training a model of a given size on a particular GPU if that model does not fit in memory.
 
-We will consider two cases here. First, we will consider training on one GPU, and then consider the case where our model is *sharded* across multiple GPUs. Though will not implement our own sharding tools here, we will use the relationships developed in the ZeRO paper, which itself influenced the development of the Fully Sharded Data Parallel (FSDP) approach used in PyTorch.
+We will consider two cases here. First, we will consider training on one GPU, and then consider the case where our model is *sharded* across multiple GPUs. Though we will not implement our own sharding tools here, we will use the relationships developed in the ZeRO paper, which itself influenced the development of the Fully Sharded Data Parallel (FSDP) approach used in PyTorch.
 
 Following the mixed-precision Adam memory accounting described by the ZeRO paper, the memory required by the model's training state can be estimated using 16 bytes per parameter.
 
@@ -209,13 +210,13 @@ where:
 
 A reserve of $f_R=0.25$ is an initial value that can be used for planning (note this is not an established result of the ZeRO paper).
 
-Assuming the training states can be fully *sharded*, or distributed, across $N$ identical GPUs, the total available memory becomes
+Assuming the training states can be fully *sharded*, or distributed, across $N_{\text{GPU}}$ identical GPUs, the total available memory becomes
 
 $$
-M_{\text{avail}}=N_{\text{GPU}} M (1-f_R)\ [\text{bytes}].
+M_{\text{avail,total}}=N_{\text{GPU}} M (1-f_R)\ [\text{bytes}].
 $$
 
-Therefore, to fit the model's training states into GPU memory, we require $M_train \leq M_{\text{avail, total}}$, i.e.,
+Therefore, to fit the model's training states into GPU memory, we require $M_{\text{train}} \leq M_{\text{avail, total}}$, i.e.,
 
 $$
 16\ \left[\frac{\text{bytes}}{\text{parameter}}\right]\ \mu\ [\text{parameters}] \leq N_{\text{GPU}}M(1-f_R)\ [\text{bytes}].
@@ -444,7 +445,7 @@ $$
 N_{\text{compute}}(\mu, \tau)  = \left\lceil k \frac{\mu^2}{\tau} \right\rceil, \quad k = \frac{6r}{\eta P}.
 $$
 
-If we wish to specify P in TOPs:
+If we wish to specify P in TFLOPs/s:
 
 $$
 \boxed{
@@ -490,10 +491,10 @@ $$
 M_{\text{avail}}=M(1-f_R).
 $$
 
-Assuming the training states can be fully *sharded*, or distributed, across $N$ identical GPUs, the total available memory becomes
+Assuming the training states can be fully *sharded*, or distributed, across $N_{\text{GPU}}$ identical GPUs, the total available memory becomes
 
 $$
-M_{\text{avail}}=N_{\text{GPU}}M(1-f_R)\ [\text{bytes}].
+M_{\text{avail,total}}=N_{\text{GPU}}M(1-f_R)\ [\text{bytes}].
 $$
 
 The number of GPUs required as driven by memory needs, $N_{\text{memory}}$ is given by dividing the memory required to train the model, $M_{\text{train}}(\mu)$ by the memory available on each GPU accounting for the reserve, $M_{\text{avail}}$. Since we cannot purchase fractional GPUs, we take the ceiling for a conservative estimate:
@@ -522,7 +523,7 @@ With expressions for the number of GPUs needed to support our workload, $C(\mu)$
 $$
 \boxed{
 N_{\text{GPU}}(\mu, \tau) = \max\{
-    N_{\text{compute}}(\mu, \tau_{\text{hrs}}),
+    N_{\text{compute}}(\mu, \tau),
     N_{\text{memory}}(\mu)
 \}
 }.
@@ -672,7 +673,7 @@ $$
 }.
 $$
 
-A before, $\tau$ is the training time budget, $\eta$ is the MFU fraction, $N_{\text{GPU}}$ is the number of GPUs available, $r$ is the ratio of tokens to parameters, $M$ is the memory per GPU, and $f_R$ is the fraction of GPU memory held in reserve. This is the inverse of our earlier GPU-count calculation and gives us the model size we can train on a fixed deadline given the number of GPUs available to us.
+As before, $\tau$ is the training time budget, $\eta$ is the MFU fraction, $N_{\text{GPU}}$ is the number of GPUs available, $r$ is the ratio of tokens to parameters, $M$ is the memory per GPU, and $f_R$ is the fraction of GPU memory held in reserve. This is the inverse of our earlier GPU-count calculation and gives us the model size we can train on a fixed deadline given the number of GPUs available to us.
 
 As with the previous calculation, if our training is compute-limited, adding more GPUs or allowing more training time will enable us to train larger models. If our training is memory-limited, increasing the available training time will not help us fit a larger model into memory.
 
@@ -684,7 +685,7 @@ The fundamental scaling relationships are summarized below for convenience.
 |---|---|---|
 | Training tokens | $D(\mu) = r\mu$ | Linear |
 | Training compute | $C(\mu) = 6r\mu^2$ | Quadratic |
-| Training-state memory | $M(\mu)_{\text{train}} = 16\mu$ | Linear |
+| Training-state memory | $M_{\text{train}}(\mu) = 16\mu$ | Linear |
 | Training wall time | $\tau(\mu) = \frac{6r\mu^2}{\eta P N_{\text{GPU}}}$ | Quadratic |
 | Compute-limited GPU count | $N_{\text{compute}}(\mu, \tau) = \left\lceil\frac{6r\mu^2}{\tau\eta P}\right\rceil$ | Quadratic |
 | Memory-limited GPU count | $N_{\text{memory}}(\mu) = \left\lceil\frac{16\mu}{M(1-f_R)}\right\rceil$ | Linear |
@@ -746,6 +747,8 @@ To illustrate how to conduct the analysis we built up here, we will conclude wit
 | Training time, $\tau_{\text{days}}$ | 30 days |
 
 (These GPU specifications and utilization assumptions are illustrative.)
+
+Note that GB here refers to $10^9$ bytes.
 
 **Step 1: Estimate Training Tokens**
 

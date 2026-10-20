@@ -35,7 +35,7 @@ jobs:
       - name: Generate PDFs
         run: |
           mkdir -p _site
-          ./make-pdfs.sh
+          bash make-pdfs.sh
 
           while IFS= read -r markdown; do
             [[ -z "$markdown" ]] && continue

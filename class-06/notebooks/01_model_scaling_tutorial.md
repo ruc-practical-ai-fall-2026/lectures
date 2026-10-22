@@ -152,7 +152,7 @@ $$
 This gives our fundamental workload estimate:
 
 $$
-\boxed{C(\mu)\approx6r\mu^2}
+C(\mu)\approx6r\mu^2
 $$
 
 We will come back to this expression to answer our computational planning questions.
@@ -358,10 +358,8 @@ Here, the numerical factor 3600 represents the conversion between seconds and ho
 If we instead express GPU throughput in [TFLOPs/s], the equation becomes
 
 $$
-\boxed{
 \tau_{\text{hrs}}(\mu) \approx
 \frac{6D\mu}{\left(3600\times10^{12}\right) \eta\ P_{\text{TF}}N_{\text{GPU}}}
-}
 $$
 
 This provides a practical way to estimate the number of hours required to train a model given its parameter count, dataset size, GPU count, peak GPU throughput, and expected utilization, assuming that the workload can be distributed across all GPUs and that the effective aggregate throughput is represented by $N_{\text{GPU}}\eta P$. In practice, GPU communication, synchronization, memory limitations, and workload partitioning can reduce scaling efficiency. These effects must be reflected in the selected MFU value for a realistic estimate.
@@ -393,11 +391,9 @@ $$
 This provides training time in [s]. To express the result in [hr], we multiply by the conversion factor $1\ \text{hr}/3600\ \text{s}$:
 
 $$
-\boxed{
 \tau_{\text{hrs}}\approx
 \frac{6r\mu^2}{\eta P N_{\text{GPU}}}
 \left(\frac{1\ \text{hr}}{3600\ \text{s}}\right)
-}
 $$
 
 where $\tau_{\text{hrs}}$ is the numerical training time expressed in hours when the conversion is applied, and:
@@ -448,31 +444,25 @@ $$
 If we wish to specify P in TFLOPs/s:
 
 $$
-\boxed{
 N_{\text{compute}}(\mu, \tau) =
     \left\lceil k \frac{\mu^2}{\tau} \right\rceil,
-    \quad k = \frac{6r}{\eta P_{TF} \times 10^{12}}
-}.
+    \quad k = \frac{6r}{\eta P_{TF} \times 10^{12}}.
 $$
 
 If we wish to specify $\tau$ in hours, $\tau_{\text{hrs}}$:
 
 $$
-\boxed{
 N_{\text{compute}}(\mu, \tau_{\text{hrs}}) =
     \left\lceil k \frac{\mu^2}{3600 \times \tau_{\text{hrs}}} \right\rceil,
-    \quad k = \frac{6r}{\eta P_{TF} \times 10^{12}}
-}.
+    \quad k = \frac{6r}{\eta P_{TF} \times 10^{12}}.
 $$
 
 Similarly, if we wish to specify $\tau$ in days, $\tau_{\text{days}}$:
 
 $$
-\boxed{
 N_{\text{compute}}(\mu, \tau_{\text{days}}) =
     \left\lceil k \frac{\mu^2}{86400 \times \tau_{\text{days}}} \right\rceil,
-    \quad k = \frac{6r}{\eta P_{TF} \times 10^{12}}
-}.
+    \quad k = \frac{6r}{\eta P_{TF} \times 10^{12}}.
 $$
 
 In all of these relationships, $\eta$ is the MFU as a ratio, $r$ is the ratio of tokens to parameter, and $P_{TF}$ is the manufacturer-specified peak throughput in TFLOPs/s.
@@ -509,9 +499,7 @@ $$
 This provides the GPU count we need accounting for memory requirements.
 
 $$
-\boxed{
-N_{\text{memory}}(\mu) = \left\lceil\frac{16\mu}{M(1 - f_R)}\right\rceil
-}.
+N_{\text{memory}}(\mu) = \left\lceil\frac{16\mu}{M(1 - f_R)}\right\rceil.
 $$
 
 So the number of GPUs as driven by memory will grow linearly with respect to the model parameters, $\mu$. Here $M$ is the manufacturer-specified memory per GPU in bytes and $f_R$ is the fraction of memory reserved for overhead (e.g., $f_R = 0.25$).
@@ -521,11 +509,9 @@ So the number of GPUs as driven by memory will grow linearly with respect to the
 With expressions for the number of GPUs needed to support our workload, $C(\mu)$ in a given time, $\tau$, and the number of GPUs needed to fit our model state in memory during training, we can now determine the final number of GPUs needed to train our model as the maximum of the two, i.e.,
 
 $$
-\boxed{
 N_{\text{GPU}}(\mu, \tau) = \max\{
     N_{\text{compute}}(\mu, \tau),
     N_{\text{memory}}(\mu)
-\}
 }.
 $$
 
@@ -544,12 +530,10 @@ $$
 More compactly, we can write a unified mathematical scaling heuristic as
 
 $$
-\boxed{
 N_{\text{GPU}} = \max\left(
     \left\lceil\left(\frac{k_C}{\tau}\right)\mu^2\right\rceil,
     \left\lceil k_M \mu \right\rceil
-\right),\ k_C = \frac{6r}{\eta P},\ k_M = \frac{16}{M(1 - f_R)}
-}.
+\right),\ k_C = \frac{6r}{\eta P},\ k_M = \frac{16}{M(1 - f_R)}.
 $$
 
 As before, $r$ is the ratio of tokens to parameter, $\eta$ is the MFU as a fraction, $P$ is the manufacturer-specified peak throughput for a given GPU, $M$ is the manufacturer-specified total memory per GPU in bytes, and $f_R$ is the fraction of memory held in reserve.
@@ -579,11 +563,9 @@ $$
 Dividing by $6r$ and taking the square root gives
 
 $$
-\boxed{
 \mu_{\text{compute}} \approx
 \sqrt{
 \frac{\tau\eta P N_{\text{GPU}}}{6r}
-}
 }.
 $$
 
@@ -592,14 +574,12 @@ Here $\mu_{\text{compute}}$ is the maximum model size, in parameters, that can b
 If the GPU throughput is specified in TFLOPs/s and training time is specified in days, we can write
 
 $$
-\boxed{
 \mu_{\text{compute}} \approx
 \sqrt{
 \frac{
 86400\tau_{\text{days}}\eta
 P_{\text{TF}}10^{12}N_{\text{GPU}}
 }{6r}
-}
 }.
 $$
 
@@ -633,10 +613,8 @@ $$
 Rearranging to solve for $\mu$ gives
 
 $$
-\boxed{
 \mu_{\text{memory}} =
-\frac{N_{\text{GPU}}M(1-f_R)}{16}
-}.
+\frac{N_{\text{GPU}}M(1-f_R)}{16}.
 $$
 
 Here $\mu_{\text{memory}}$ represents the maximum number of parameters whose estimated training states can fit in the available GPU memory.
@@ -650,27 +628,23 @@ To train a model successfully, it must satisfy both the compute and memory const
 We can express this relationship as
 
 $$
-\boxed{
 \mu_{\text{max}} =
 \min\left(
 \mu_{\text{compute}},
 \mu_{\text{memory}}
-\right)
-}.
+\right).
 $$
 
 Substituting our expressions gives
 
 $$
-\boxed{
 \mu_{\text{max}} =
 \min\left(
 \sqrt{
 \frac{\tau\eta P N_{\text{GPU}}}{6r}
 },
 \frac{N_{\text{GPU}}M(1-f_R)}{16}
-\right)
-}.
+\right).
 $$
 
 As before, $\tau$ is the training time budget, $\eta$ is the MFU fraction, $N_{\text{GPU}}$ is the number of GPUs available, $r$ is the ratio of tokens to parameters, $M$ is the memory per GPU, and $f_R$ is the fraction of GPU memory held in reserve. This is the inverse of our earlier GPU-count calculation and gives us the model size we can train on a fixed deadline given the number of GPUs available to us.
@@ -693,25 +667,21 @@ The fundamental scaling relationships are summarized below for convenience.
 The total number of GPUs required is the maximum of the compute-limited and memory-limited GPU counts:
 
 $$
-\boxed{
 N_{\text{GPU}} =
 \max\left(
 N_{\text{compute}},
 N_{\text{memory}}
-\right)
-}.
+\right).
 $$
 
 Conversely, given a fixed number of GPUs and an available training time, the maximum model size is
 
 $$
-\boxed{
 \mu_{\text{max}} =
 \min\left(
 \mu_{\text{compute}},
 \mu_{\text{memory}}
-\right)
-}.
+\right).
 $$
 
 ### 6.1 Observations

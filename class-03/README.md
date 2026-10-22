@@ -1,4 +1,4 @@
-# Class 03 - ML Practices
+# Class 03 - Basic ML Practices
 
 In this class we review common tools we will use throughout the semester.
 
